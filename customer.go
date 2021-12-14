@@ -8,7 +8,7 @@ import (
 
 // Customers : Untuk konfigurasi field tags, bisa dilihat di
 //https://gorm.io/docs/models.html#Fields-Tags
-type Customers struct {
+type Customer struct {
 	ID        string `gorm:"column:id;size:36;primaryKey"`
 	FirstName string `gorm:"column:first_name;size:50;not null"`
 	LastName  string `gorm:"column:last_name;size:50;not null"`
@@ -21,10 +21,10 @@ type Customers struct {
 	gorm.Model
 }
 
-func (c *Customers) TableName() string {
+func (c *Customer) TableName() string {
 	return "mst_customers"
 }
-func (c *Customers) ToString() string {
+func (c *Customer) ToString() string {
 	customer, err := json.Marshal(c)
 	if err != nil {
 		return ""

@@ -8,11 +8,11 @@ import (
 )
 
 type DbConn struct {
-	db *gorm.DB
+	Db *gorm.DB
 }
 
 func (d *DbConn) PingTest() {
-	db, err := d.db.DB()
+	db, err := d.Db.DB()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -25,13 +25,13 @@ func (d *DbConn) PingTest() {
 }
 
 func (d *DbConn) Migration(tables ...interface{}) {
-	err := d.db.AutoMigrate(tables...)
+	err := d.Db.AutoMigrate(tables...)
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
 func (d *DbConn) Close() {
-	db, err := d.db.DB()
+	db, err := d.Db.DB()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -56,6 +56,6 @@ func NewDbConn() *DbConn {
 		log.Fatalln(err)
 	}
 	return &DbConn{
-		db: db,
+		Db: db,
 	}
 }
