@@ -1,14 +1,13 @@
 package main
 
-import "log"
-
 func main() {
 	db := NewDbConn()
 	defer db.Close()
 	db.PingTest()
 	db.Migration(&Customer{}, &UserCredential{}, &Address{}, &CustomerProduct{})
 
-	//customerProductRepo := NewCustomerProductRepo(db)
+	customerProductRepo := NewCustomerProductRepo(db)
+	customerProductRepo.FindTotalCustomerByProduct()
 	//customerProductRepo.Insert(CustomerProduct{
 	//	ID:          "CP001",
 	//	ProductName: "Deposito Rupiah",
@@ -25,7 +24,7 @@ func main() {
 	//	ID:          "CP004",
 	//	ProductName: "Tabungan",
 	//})
-	customerRepo := NewCustomerRepo(db)
+	//customerRepo := NewCustomerRepo(db)
 	//err := customerRepo.OpenProductForExistingCustomer(Customer{
 	//	ID: "C001",
 	//	Products: []*CustomerProduct{
@@ -94,8 +93,8 @@ func main() {
 	//	Password: "222333",
 	//})
 	//log.Println(isAuth)
-	customer := customerRepo.FindById("C001")
-	log.Println(customer.ToString())
+	//customer := customerRepo.FindById("C001")
+	//log.Println(customer.ToString())
 
 	//customers := customerRepo.FindAllCustomerPaging(2, 1)
 	//log.Println("Page 1")

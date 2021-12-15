@@ -1,6 +1,6 @@
 package main
 
-import "log"
+import "fmt"
 
 type CustomerProductRepo struct {
 	BaseRepo
@@ -11,25 +11,34 @@ func (cr *CustomerProductRepo) Insert(newCustomerProduct CustomerProduct) error 
 	return cr.HandleError(result)
 }
 
-func (cr *CustomerProductRepo) FindById(id string) Customer {
-	var customer Customer
-	result := cr.conn.Db.Debug().Preload("Addresses").First(&customer, "id = ?", id)
-	err := cr.HandleError(result)
-	if err != nil {
-		log.Println(err)
-		return Customer{}
-	}
-	return customer
-}
+func (cr *CustomerProductRepo) FindTotalCustomerByProduct() AggProductResult {
+	var total AggProductResult
 
-func (cr *CustomerProductRepo) FindAllCustomerPaging(limit int, page int) []Customer {
-	var customers []Customer
-	result := cr.conn.Db.Limit(limit).Offset((page - 1) * limit).Preload("Addresses").Find(&customers)
+	subQuery1 := cr.conn.Db.Model(&CustomerProducts{}).Select("customer_product_id", "COUNT(customer_product_id) as total ").Group("customer_product_id")
+	result := cr.conn.Db.Table("(?) as CustomerProductCount", subQuery1).
+		Select("mst_customer_product.first_name as product_name,CustomerProductCount.total").
+		Joins("JOIN mst_customer_product ON mst_customer_product.id = CustomerProductCount.customer_product_id").
+		Scan(&total)
+	//	result := cr.conn.Db.Raw(`
+	//		SELECT mst_customer_product.first_name as product_name,CustomerProductCount.total
+	//        FROM
+	//		(SELECT customer_product_id,COUNT(customer_product_id) as total
+	//		FROM customer_products
+	//		GROUP BY customer_product_id) CustomerProductCount JOIN mst_customer_product ON
+	//			mst_customer_product.id = CustomerProductCount.customer_product_id
+	//`).Scan(&total)
+	fmt.Println(total)
 	err := cr.HandleError(result)
 	if err != nil {
-		return nil
+		//	return AggResult{
+		//		Total: -1,
+		//	}
+		return AggProductResult{
+			ProductName: "",
+			Total:       -1,
+		}
 	}
-	return customers
+	return total
 }
 
 func NewCustomerProductRepo(conn *DbConn) *CustomerProductRepo {
