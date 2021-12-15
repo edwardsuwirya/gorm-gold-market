@@ -49,13 +49,21 @@ func NewDbConn() *DbConn {
 	dbName := "gold_market"
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", dbHost, dbUser, dbPassword, dbName, dbPort)
 
+	env := "dev"
 	//Daftar konfigurasi GORM apa saja yang ada
 	//https://gorm.io/docs/gorm_config.html
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
+	if env == "dev" {
+		return &DbConn{
+			Db: db.Debug(),
+		}
+	}
+
 	return &DbConn{
 		Db: db,
 	}
+
 }

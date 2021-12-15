@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Customers : Untuk konfigurasi field tags, bisa dilihat di
+// Customer Customers : Untuk konfigurasi field tags, bisa dilihat di
 //https://gorm.io/docs/models.html#Fields-Tags
 type Customer struct {
 	ID        string `gorm:"column:id;size:36;primaryKey"`
