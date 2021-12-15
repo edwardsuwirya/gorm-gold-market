@@ -35,7 +35,7 @@ func (cr *CustomerRepo) Update(updateCustomerInfo Customer) error {
 
 func (cr *CustomerRepo) FindById(id string) Customer {
 	var customer Customer
-	result := cr.conn.Db.First(&customer, "id = ?", id)
+	result := cr.conn.Db.Debug().Preload("Addresses").First(&customer, "id = ?", id)
 	err := cr.HandleError(result)
 	if err != nil {
 		log.Println(err)
@@ -46,7 +46,7 @@ func (cr *CustomerRepo) FindById(id string) Customer {
 
 func (cr *CustomerRepo) FindAllCustomerPaging(limit int, page int) []Customer {
 	var customers []Customer
-	result := cr.conn.Db.Limit(limit).Offset((page - 1) * limit).Find(&customers)
+	result := cr.conn.Db.Limit(limit).Offset((page - 1) * limit).Preload("Addresses").Find(&customers)
 	err := cr.HandleError(result)
 	if err != nil {
 		return nil

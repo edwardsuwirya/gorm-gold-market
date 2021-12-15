@@ -13,7 +13,7 @@ type Customer struct {
 	FirstName      string `gorm:"column:first_name;size:50;not null"`
 	LastName       string `gorm:"column:last_name;size:50;not null"`
 	BirthDate      time.Time
-	Address        string
+	Addresses      []Address
 	Status         int
 	UserCredential UserCredential
 	gorm.Model
