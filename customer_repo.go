@@ -35,7 +35,7 @@ func (cr *CustomerRepo) Update(updateCustomerInfo Customer) error {
 
 func (cr *CustomerRepo) FindById(id string) Customer {
 	var customer Customer
-	result := cr.conn.Db.Debug().Preload("Addresses").First(&customer, "id = ?", id)
+	result := cr.conn.Db.Debug().Preload("Addresses").Preload("Products").First(&customer, "id = ?", id)
 	err := cr.HandleError(result)
 	if err != nil {
 		log.Println(err)
@@ -74,6 +74,11 @@ func (cr *CustomerRepo) TotalCustomer() AggResult {
 		}
 	}
 	return total
+}
+
+func (cr *CustomerRepo) OpenProductForExistingCustomer(customerWithProduct Customer) error {
+	result := cr.conn.Db.Model(&customerWithProduct).Updates(customerWithProduct)
+	return cr.HandleError(result)
 }
 
 func NewCustomerRepo(conn *DbConn) *CustomerRepo {

@@ -16,6 +16,7 @@ type Customer struct {
 	Addresses      []Address
 	Status         int
 	UserCredential UserCredential
+	Products       []*CustomerProduct `gorm:"many2many:customer_products;"`
 	gorm.Model
 }
 

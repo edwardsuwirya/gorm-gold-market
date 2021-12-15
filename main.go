@@ -1,16 +1,42 @@
 package main
 
-import (
-	"log"
-)
+import "log"
 
 func main() {
 	db := NewDbConn()
 	defer db.Close()
 	db.PingTest()
-	db.Migration(&Customer{}, &UserCredential{}, &Address{})
+	db.Migration(&Customer{}, &UserCredential{}, &Address{}, &CustomerProduct{})
 
+	//customerProductRepo := NewCustomerProductRepo(db)
+	//customerProductRepo.Insert(CustomerProduct{
+	//	ID:          "CP001",
+	//	ProductName: "Deposito Rupiah",
+	//})
+	//customerProductRepo.Insert(CustomerProduct{
+	//	ID:          "CP002",
+	//	ProductName: "Deposito Dollar",
+	//})
+	//customerProductRepo.Insert(CustomerProduct{
+	//	ID:          "CP003",
+	//	ProductName: "Tabungan Emas",
+	//})
+	//customerProductRepo.Insert(CustomerProduct{
+	//	ID:          "CP004",
+	//	ProductName: "Tabungan",
+	//})
 	customerRepo := NewCustomerRepo(db)
+	//err := customerRepo.OpenProductForExistingCustomer(Customer{
+	//	ID: "C001",
+	//	Products: []*CustomerProduct{
+	//		{
+	//			ID: "CP003",
+	//		},
+	//	},
+	//})
+	//if err != nil {
+	//	return
+	//}
 	//err := customerRepo.Insert(Customer{
 	//	ID:        "C001",
 	//	FirstName: "Jution",
@@ -68,14 +94,14 @@ func main() {
 	//	Password: "222333",
 	//})
 	//log.Println(isAuth)
-	//customer := customerRepo.FindById("C003")
-	//log.Println(customer.ToString())
+	customer := customerRepo.FindById("C001")
+	log.Println(customer.ToString())
 
-	customers := customerRepo.FindAllCustomerPaging(2, 1)
-	log.Println("Page 1")
-	for _, c := range customers {
-		log.Println(c.ToString())
-	}
+	//customers := customerRepo.FindAllCustomerPaging(2, 1)
+	//log.Println("Page 1")
+	//for _, c := range customers {
+	//	log.Println(c.ToString())
+	//}
 	//customers = customerRepo.FindAllCustomerPaging(2, 2)
 	//log.Println("Page 2")
 	//for _, c := range customers {
