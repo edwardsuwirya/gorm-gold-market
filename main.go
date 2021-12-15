@@ -1,14 +1,12 @@
 package main
 
-import (
-	"log"
-)
+import "log"
 
 func main() {
 	db := NewDbConn()
 	defer db.Close()
 	db.PingTest()
-	db.Migration(&Customer{})
+	db.Migration(&Customer{}, &UserCredential{})
 
 	customerRepo := NewCustomerRepo(db)
 	//err := customerRepo.Insert(Customer{
@@ -18,9 +16,13 @@ func main() {
 	//	BirthDate: time.Time{},
 	//	Address:   "Lampung",
 	//	Status:    1,
-	//	Username:  "tika",
-	//	Password:  "222333",
-	//	Email:     "tika@enigmacamp.com",
+	//	UserCredential: UserCredential{
+	//		ID:       "C003",
+	//		Username: "tika",
+	//		Password: "222333",
+	//		Email:    "tika@enigmacamp.com",
+	//		IsActive: true,
+	//	},
 	//})
 	//if err != nil {
 	//	log.Println(err.Error())
@@ -45,9 +47,15 @@ func main() {
 	//	Email:     "",
 	//})
 
-	//customer := customerRepo.FindById("C001")
-	//log.Println(customer.ToString())
-	//
+	authRepo := NewAuthRepo(db)
+	isAuth := authRepo.Authenticate(UserCredential{
+		Username: "tika",
+		Password: "222333",
+	})
+	log.Println(isAuth)
+	customer := customerRepo.FindById("C003")
+	log.Println(customer.ToString())
+
 	//customers := customerRepo.FindAllCustomerPaging(2, 1)
 	//log.Println("Page 1")
 	//for _, c := range customers {
@@ -59,12 +67,12 @@ func main() {
 	//	log.Println(c.ToString())
 	//}
 
-	customers := customerRepo.FindCustomerPaging(Customer{FirstName: "Ka"}, 2, 1)
-	log.Println("Page 1")
-	for _, c := range customers {
-		log.Println(c.ToString())
-	}
-
-	total := customerRepo.TotalCustomer()
-	log.Println(total)
+	//customers := customerRepo.FindCustomerPaging(Customer{FirstName: "Ka"}, 2, 1)
+	//log.Println("Page 1")
+	//for _, c := range customers {
+	//	log.Println(c.ToString())
+	//}
+	//
+	//total := customerRepo.TotalCustomer()
+	//log.Println(total)
 }

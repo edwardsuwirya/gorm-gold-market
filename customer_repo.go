@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 type CustomerRepo struct {
 	BaseRepo
 }
@@ -36,6 +38,7 @@ func (cr *CustomerRepo) FindById(id string) Customer {
 	result := cr.conn.Db.First(&customer, "id = ?", id)
 	err := cr.HandleError(result)
 	if err != nil {
+		log.Println(err)
 		return Customer{}
 	}
 	return customer

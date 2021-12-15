@@ -9,15 +9,13 @@ import (
 // Customer Customers : Untuk konfigurasi field tags, bisa dilihat di
 //https://gorm.io/docs/models.html#Fields-Tags
 type Customer struct {
-	ID        string `gorm:"column:id;size:36;primaryKey"`
-	FirstName string `gorm:"column:first_name;size:50;not null"`
-	LastName  string `gorm:"column:last_name;size:50;not null"`
-	BirthDate time.Time
-	Address   string
-	Status    int
-	Username  string
-	Password  string
-	Email     string
+	ID             string `gorm:"column:id;size:36;primaryKey"`
+	FirstName      string `gorm:"column:first_name;size:50;not null"`
+	LastName       string `gorm:"column:last_name;size:50;not null"`
+	BirthDate      time.Time
+	Address        string
+	Status         int
+	UserCredential UserCredential
 	gorm.Model
 }
 
