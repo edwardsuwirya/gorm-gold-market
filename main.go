@@ -8,7 +8,7 @@ func main() {
 	db.PingTest()
 	db.Migration(&Customer{}, &UserCredential{})
 
-	customerRepo := NewCustomerRepo(db)
+	//customerRepo := NewCustomerRepo(db)
 	//err := customerRepo.Insert(Customer{
 	//	ID:        "C003",
 	//	FirstName: "Tika",
@@ -53,8 +53,8 @@ func main() {
 		Password: "222333",
 	})
 	log.Println(isAuth)
-	customer := customerRepo.FindById("C003")
-	log.Println(customer.ToString())
+	//customer := customerRepo.FindById("C003")
+	//log.Println(customer.ToString())
 
 	//customers := customerRepo.FindAllCustomerPaging(2, 1)
 	//log.Println("Page 1")

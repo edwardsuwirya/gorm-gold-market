@@ -35,7 +35,7 @@ func (cr *CustomerRepo) Update(updateCustomerInfo Customer) error {
 
 func (cr *CustomerRepo) FindById(id string) Customer {
 	var customer Customer
-	result := cr.conn.Db.First(&customer, "id = ?", id)
+	result := cr.conn.Db.Preload("UserCredential").First(&customer, "id = ?", id)
 	err := cr.HandleError(result)
 	if err != nil {
 		log.Println(err)

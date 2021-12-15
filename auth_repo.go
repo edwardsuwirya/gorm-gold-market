@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"gorm.io/gorm"
-	"log"
 )
 
 type AuthRepo struct {
@@ -24,21 +23,6 @@ func (cr *AuthRepo) Authenticate(cred UserCredential) error {
 		return err
 	}
 	return nil
-}
-
-func (cr *AuthRepo) Authenticate2(cred UserCredential) (Customer, error) {
-	var userCred UserCredential
-	result := cr.conn.Db.Where("username = ? AND password = ?", cred.Username, cred.Password).Preload("mst_customers").First(&userCred)
-	err := cr.HandleError(result)
-	log.Println(result)
-	if err != nil {
-		//GORM returns ErrRecordNotFound when failed to find data with First, Last, Take
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return Customer{}, errors.New("Unauthorized")
-		}
-		return Customer{}, err
-	}
-	return Customer{}, nil
 }
 
 func NewAuthRepo(conn *DbConn) *AuthRepo {
